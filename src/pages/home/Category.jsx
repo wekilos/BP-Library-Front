@@ -11,6 +11,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [filter, setFilter] = useState({ page: 1, limit: 20 });
+  const [ismore, setIsmore] = useState(true);
 
   useEffect(() => {
     getCategories();
@@ -30,13 +31,27 @@ const Home = () => {
       })
       .then((data) => {
         console.log(data.data);
-        setCategories(data.data);
+        if (filter.page > 1) {
+          let oldData = categories.CategoryItems;
+          let newArr = oldData.concat(data?.data?.CategoryItems);
+          setCategories({ ...categories, CategoryItems: newArr });
+          data?.data?.CategoryItems?.length > 0
+            ? setIsmore(true)
+            : setIsmore(false);
+        } else {
+          setCategories(data.data);
+        }
+
         setLoading(false);
       })
       .catch((err) => {
         console.log(err);
         setLoading(false);
       });
+  };
+
+  const getMore = () => {
+    setFilter({ ...filter, page: filter.page + 1 });
   };
 
   return (
@@ -65,16 +80,14 @@ const Home = () => {
                   })}
                 </div>
                 <div className="flex justify-center mt-2">
-                  <button
-                    onClick={() =>
-                      history.push({
-                        pathname: "/id=" + categories?.id + "/q=",
-                      })
-                    }
-                    className="bg-main text-white rounded-[5px] text-[18px] py-2 px-7"
-                  >
-                    Ählisi
-                  </button>
+                  {ismore && (
+                    <button
+                      onClick={() => getMore()}
+                      className="bg-main text-white rounded-[5px] text-[18px] py-2 px-7"
+                    >
+                      Dowamy
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -110,14 +123,14 @@ const Home = () => {
                   })}
                 </div>
                 <div className="flex justify-center mt-2">
-                  <button
-                    onClick={() =>
-                      setFilter({ ...filter, limit: filter.limit + 8 })
-                    }
-                    className="bg-main text-white rounded-[5px] text-[18px] py-2 px-7"
-                  >
-                    Ählisi
-                  </button>
+                  {ismore && (
+                    <button
+                      onClick={() => getMore()}
+                      className="bg-main text-white rounded-[5px] text-[18px] py-2 px-7"
+                    >
+                      Dowamy
+                    </button>
+                  )}
                 </div>
               </div>
             )}
