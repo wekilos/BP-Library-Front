@@ -4,23 +4,15 @@ import { BASE_URL, axiosInstance } from "../../utils/axiosIntance";
 import Title from "../../components/Title";
 import { Downloading, AutoStories } from "@mui/icons-material";
 
-import DocViewer, {
-  DocViewerRenderers,
-  PDFRenderer,
-  PNGRenderer,
-  DocRenderer,
-} from "@cyntler/react-doc-viewer";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
 const Item = () => {
   const history = useHistory();
   const { id } = useParams();
   const [item, setItem] = useState();
   const [read, setRead] = useState(false);
-
-  // const docs = [
-  //   { uri: "https://url-to-my-pdf.pdf" }, // Remote file
-  //   { uri: require("./example-files/pdf.pdf") }, // Local File
-  // ];
+  const [filename, setFileName] = useState("");
+  const [fileType, setFileType] = useState("pdf");
 
   useEffect(() => {
     getItem();
@@ -32,6 +24,14 @@ const Item = () => {
       .then((data) => {
         console.log(data.data);
         setItem(data.data);
+        console.log(data?.data?.CategoryItemFiles[0]?.filename);
+        if (data?.data?.CategoryItemFiles?.length > 0) {
+          let name = data?.data?.CategoryItemFiles[0]?.filename?.slice(10);
+          console.log(name);
+          setFileName(name);
+          let arra = name?.split(".");
+          setFileType(arra[arra?.length - 1]);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -121,44 +121,48 @@ const Item = () => {
       </div>
 
       {read && (
-        <div className="w-full mt-2 p-2 h-[75vh] overflow-y-auto scrollbar-hide">
-          {/* <div dangerouslySetInnerHTML={{ __html: item?.text_tm }} /> */}
-          <DocViewer
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-            documents={[{ uri: BASE_URL + item?.placeholder }]}
-            // initialActiveDocument={
-            //   BASE_URL + item?.CategoryItemFiles[0]?.filename
-            // }
-            // activeDocument={BASE_URL + item?.placeholder}
-            // pluginRenderers={DocViewerRenderers}
-            pluginRenderers={[PDFRenderer, PNGRenderer]}
-            theme={{
-              primary: "#5296d8",
-              secondary: "#ffffff",
-              tertiary: "#5296d899",
-              textPrimary: "#ffffff",
-              textSecondary: "#5296d8",
-              textTertiary: "#00000099",
-              disableThemeScrollbar: false,
-            }}
-            // prefetchMethod="GET"
-            // config={{
-            //   header: {
-            //     disableHeader: false,
-            //     disableFileName: false,
-            //     retainURLParams: false,
-            //   },
-            //   csvDelimiter: ",", // "," as default,
-            //   pdfZoom: {
-            //     defaultZoom: 1.1, // 1 as default,
-            //     zoomJump: 0.2, // 0.1 as default,
-            //   },
-            //   pdfVerticalScrollByDefault: true, // false as default
-            //   loadingRenderer: {
-            //     overrideComponent: MyLoadingRenderer,
-            //   },
-            // }}
-          />
+        <div className="w-full mt-2 p-2 h-[100vh] overflow-y-auto scrollbar-hide">
+          {fileType === "pdf" ? (
+            <DocViewer
+              documents={[
+                {
+                  uri: `${BASE_URL}file/${filename}`,
+                },
+              ]}
+              pluginRenderers={DocViewerRenderers}
+              theme={{
+                primary: "#5296d8",
+                secondary: "#ffffff",
+                tertiary: "#5296d899",
+                textPrimary: "#ffffff",
+                textSecondary: "#5296d8",
+                textTertiary: "#00000099",
+                disableThemeScrollbar: false,
+              }}
+              prefetchMethod="GET"
+              config={{
+                header: {
+                  disableHeader: false,
+                  disableFileName: false,
+                  retainURLParams: false,
+                },
+                csvDelimiter: ",", // "," as default,
+                pdfZoom: {
+                  defaultZoom: 1.1, // 1 as default,
+                  zoomJump: 0.2, // 0.1 as default,
+                },
+                pdfVerticalScrollByDefault: true, // false as default
+                loadingRenderer: {
+                  overrideComponent: MyLoadingRenderer,
+                },
+              }}
+            />
+          ) : (
+            <div
+              className="  select-text text-[18px]"
+              dangerouslySetInnerHTML={{ __html: item?.text_tm }}
+            />
+          )}
         </div>
       )}
     </div>

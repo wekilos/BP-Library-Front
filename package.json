@@ -1,5 +1,5 @@
 {
-  "name": "e-test-admin",
+  "name": "e-test-front",
   "version": "0.1.0",
   "private": true,
   "description": "Turkmenistanyn Bash prokuraturasynyn elektron test portaly-2024",
@@ -24,6 +24,7 @@
     "dotenv": "^16.4.5",
     "html2pdf.js": "^0.10.1",
     "moment": "^2.30.1",
+    "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^5.2.0",
