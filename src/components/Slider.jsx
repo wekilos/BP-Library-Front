@@ -1,40 +1,56 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useHistory } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import image from "../images/image.png";
+
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { BASE_URL } from "../utils/axiosIntance";
 
 const SimpleSlider = ({ slides }) => {
   const history = useHistory();
-  var settings = {
-    dots: false,
-    arrows: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+  const refSimilar = useRef();
+
+  const ScroollRight = (refNewProduct) => {
+    refNewProduct.current.scrollBy(224, 0);
   };
+  const ScroollLeft = (refNewProduct) => {
+    refNewProduct.current.scrollBy(-224, 0);
+  };
+
   return (
-    <div className="w-full h-300px]">
-      <Slider {...settings}>
+    <div className="w-full h-[300px] flex items-center gap-2 justify-between my-2">
+      <div className="bg-main cursor-pointer rounded-[100%] w-[20px]  h-[20px]  text-white flex justify-center items-center">
+        <KeyboardArrowLeftIcon
+          onClick={() => ScroollLeft(refSimilar)}
+          className="text-white text-[12px] font-[900]"
+        />
+      </div>
+
+      <div
+        ref={refSimilar}
+        className="w-full flex  justify-start gap-6 overflow-x-auto scrollbar-hide"
+      >
         {slides?.map((item, i) => {
           return (
             <div
               onClick={() => history.push({ pathname: "/item/" + item?.id })}
               key={"surat" + i}
-              className="h-[300px] w-[auto] cursor-pointer "
+              className="    min-w-[200px] w-[200px] cursor-pointer "
             >
               <img
-                className="object-contain h-full"
+                className="w-full object-contain"
                 src={BASE_URL + item?.placeholder}
                 alt=""
               />
             </div>
           );
         })}
-      </Slider>
+      </div>
+      <div className="bg-main cursor-pointer rounded-[100%] w-[20px]  h-[20px]  text-white flex justify-center items-center">
+        <KeyboardArrowRightIcon
+          onClick={() => ScroollRight(refSimilar)}
+          className="text-white text-[18px]   font-[900]"
+        />
+      </div>
     </div>
   );
 };

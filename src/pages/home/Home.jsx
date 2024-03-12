@@ -47,7 +47,7 @@ const Home = () => {
               {i === 0 && category?.CategoryItems?.length > 0 && (
                 <div className="w-full mb-5 min-h-fit">
                   <Title text={category?.name_tm} />
-                  <div className="w-full p-4 ">
+                  <div className="w-full py-2 ">
                     <SimpleSlider slides={category?.CategoryItems} />
                   </div>
                   <div className="flex justify-center my-2">
