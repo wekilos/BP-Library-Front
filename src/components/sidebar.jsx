@@ -19,7 +19,11 @@ const Sidebar = () => {
   const getGroups = () => {
     setLoading(true);
     axiosInstance
-      .get("/api/category/all")
+      .get("/api/category/all", {
+        params: {
+          limit: 0,
+        },
+      })
       .then((data) => {
         console.log("data", data.data);
         setGroups(data.data?.rows);

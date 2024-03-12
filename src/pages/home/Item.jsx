@@ -121,7 +121,7 @@ const Item = () => {
       </div>
 
       {read && (
-        <div className="w-full mt-2 p-2 h-[100vh] overflow-y-auto scrollbar-hide">
+        <div className="w-full mt-2 p-2 h-[87vh] overflow-y-auto scrollbar-hide">
           {fileType === "pdf" ? (
             <DocViewer
               documents={[
@@ -159,7 +159,7 @@ const Item = () => {
             />
           ) : (
             <div
-              className="  select-text text-[18px]"
+              className="h-full p-3 bg-white border-t-[10px] border-blue overflow-y-auto  select-text text-[18px] scrollbar-hide"
               dangerouslySetInnerHTML={{ __html: item?.text_tm }}
             />
           )}
